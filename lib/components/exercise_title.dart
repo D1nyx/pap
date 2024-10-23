@@ -52,5 +52,4 @@ class ExerciseTitle extends StatelessWidget {
       ),
     );
   }
-  // Olá
 }
