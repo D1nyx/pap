@@ -7,21 +7,8 @@ import 'package:pap/models/workout.dart';
 class WorkoutData extends ChangeNotifier {
   final db = HiveDatabase();
 
-  List<Workout> workoutList = [
-    Workout(
-      name: "Parte Superior",
-      exercises: [
-        Exercise(
-          name: "Bicep Curls",
-          weight: "10",
-          reps: "10",
-          sets: "3",
-        ),
-      ],
-    ),
-  ];
+  List<Workout> workoutList = [];
 
-  // Initialize workout list by checking the database
   void initializeWorkoutList() {
     if (db.previousDataExists()) {
       workoutList = db.readFromDatabase();

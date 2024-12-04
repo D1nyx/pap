@@ -4,6 +4,7 @@ class Exercise {
   final String reps;
   final String sets;
   bool isCompleted;
+  String? dateCompleted;
 
   Exercise({
     required this.name,
@@ -11,5 +12,6 @@ class Exercise {
     required this.reps,
     required this.sets,
     this.isCompleted = false,
+    this.dateCompleted,
   });
 }

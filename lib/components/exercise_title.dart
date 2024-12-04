@@ -21,33 +21,44 @@ class ExerciseTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: const Color.fromARGB(255, 178, 118, 189),
+      color: const Color.fromARGB(255, 0, 0, 0),
       child: ListTile(
         title: Text(
           exerciseName,
+          style: const TextStyle(color: Colors.white),
         ),
         subtitle: Row(
           children: [
             Chip(
               label: Text(
                 "$weight Kg",
+                style: const TextStyle(color: Colors.white),
               ),
+              backgroundColor: Colors.black,
             ),
+            const SizedBox(width: 5),
             Chip(
               label: Text(
                 "$reps Repetições",
+                style: const TextStyle(color: Colors.white),
               ),
+              backgroundColor: Colors.black,
             ),
+            const SizedBox(width: 5),
             Chip(
               label: Text(
                 "$sets Sets",
+                style: const TextStyle(color: Colors.white),
               ),
+              backgroundColor: Colors.black,
             ),
           ],
         ),
         trailing: Checkbox(
           value: isCompleted,
           onChanged: onCheckBoxChanged != null ? (value) => onCheckBoxChanged!(value) : null,
+          activeColor: Colors.white,
+          checkColor: Colors.black,
         ),
       ),
     );

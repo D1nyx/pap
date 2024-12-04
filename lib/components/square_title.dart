@@ -13,7 +13,7 @@ class SquareTitle extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.white),
+        border: Border.all(color: const Color.fromARGB(255, 255, 255, 255)),
         borderRadius: BorderRadius.circular(16),
         color: Colors.grey[200],
       ),

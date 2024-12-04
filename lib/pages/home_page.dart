@@ -18,12 +18,12 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    Provider.of<WorkoutData>(context, listen: false).initializeWorkoutList(); // Fixed typo
+    Provider.of<WorkoutData>(context, listen: false).initializeWorkoutList();
   }
 
   @override
   void dispose() {
-    newWorkoutNameController.dispose(); // Dispose controller to avoid memory leaks
+    newWorkoutNameController.dispose();
     super.dispose();
   }
 
@@ -83,7 +83,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Consumer<WorkoutData>(
       builder: (context, value, child) => Scaffold(
-        backgroundColor: const Color.fromARGB(255, 240, 230, 241),
+        backgroundColor: const Color.fromARGB(255, 255, 179, 64),
         appBar: AppBar(
           title: const Text('FitJourney'),
         ),
@@ -108,7 +108,7 @@ class _HomePageState extends State<HomePage> {
                     icon: const Icon(Icons.arrow_forward_ios),
                     onPressed: () =>
                         goToWorkoutPage(value.getWorkoutList()[index].name),
-                  ),
+                  )
                 ),
               ),
             ),

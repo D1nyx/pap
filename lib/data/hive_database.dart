@@ -38,18 +38,14 @@ class HiveDatabase {
   List<Workout> readFromDatabase() {
     List<Workout> mySavedWorkouts = [];
 
-    // Retrieve the workout names and exercises
     List<String> workoutNames = List<String>.from(_myBox.get("WORKOUTS", defaultValue: []));
-    
-    // Retrieve and cast the exercise details safely
+
     List<dynamic> exerciseDetailsDynamic = _myBox.get("EXERCISES", defaultValue: []);
-    
-    // Ensure correct casting
+
     List<List<List<dynamic>>> exerciseDetails = exerciseDetailsDynamic.map((item) {
       return List<List<dynamic>>.from(item.map((innerItem) => List<dynamic>.from(innerItem)));
     }).toList();
 
-    // Process each workout and its exercises
     for (int i = 0; i < workoutNames.length; i++) {
       List<Exercise> exercisesInWorkout = [];
 
