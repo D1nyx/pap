@@ -21,46 +21,64 @@ class ExerciseTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: const Color.fromARGB(255, 0, 0, 0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(25), // Increased curve
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 8,
+            offset: const Offset(0, 4), // Subtle shadow for depth
+          ),
+        ],
+      ),
+      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
       child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
         title: Text(
           exerciseName,
-          style: const TextStyle(color: Colors.white),
+          style: const TextStyle(
+            color: Colors.black87,
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
         ),
-        subtitle: Row(
-          children: [
-            Chip(
-              label: Text(
-                "$weight Kg",
-                style: const TextStyle(color: Colors.white),
-              ),
-              backgroundColor: Colors.black,
-            ),
-            const SizedBox(width: 5),
-            Chip(
-              label: Text(
-                "$reps Repetições",
-                style: const TextStyle(color: Colors.white),
-              ),
-              backgroundColor: Colors.black,
-            ),
-            const SizedBox(width: 5),
-            Chip(
-              label: Text(
-                "$sets Sets",
-                style: const TextStyle(color: Colors.white),
-              ),
-              backgroundColor: Colors.black,
-            ),
-          ],
+        subtitle: Padding(
+          padding: const EdgeInsets.only(top: 8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              _buildChip("$weight Kg"),
+              const SizedBox(width: 8),
+              _buildChip("$reps Repetições"),
+              const SizedBox(width: 8),
+              _buildChip("$sets Sets"),
+            ],
+          ),
         ),
         trailing: Checkbox(
           value: isCompleted,
-          onChanged: onCheckBoxChanged != null ? (value) => onCheckBoxChanged!(value) : null,
-          activeColor: Colors.white,
-          checkColor: Colors.black,
+          onChanged: onCheckBoxChanged != null
+              ? (value) => onCheckBoxChanged!(value)
+              : null,
+          activeColor: Colors.purpleAccent,
+          checkColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5),
+          ),
         ),
       ),
+    );
+  }
+
+  Widget _buildChip(String label) {
+    return Chip(
+      label: Text(
+        label,
+        style: const TextStyle(color: Colors.black87, fontWeight: FontWeight.bold),
+      ),
+      backgroundColor: Colors.grey[200],
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
     );
   }
 }
