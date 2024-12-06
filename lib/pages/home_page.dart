@@ -154,7 +154,7 @@ class _HomePageState extends State<HomePage> {
                   itemBuilder: (context, index) {
                     final workout = value.getWorkoutList()[index];
 
-                    bool hasSelectedExercise = workout.exercises.any((exercise) => exercise.isSelected);
+                    bool hasSelectedExercise = workout.exercises.any((exercise) => exercise.isCompleted);
 
                     return GestureDetector(
                       onTap: () => goToWorkoutPage(workout.name),
