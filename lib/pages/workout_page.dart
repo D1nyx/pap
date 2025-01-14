@@ -150,7 +150,7 @@ class _WorkoutPageState extends State<WorkoutPage> {
         body: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
-              colors: [Color(0xFF4A148C), Color(0xFF880E4F)],
+              colors: [Color(0xFF1A237E), Color(0xFFD500F9)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),

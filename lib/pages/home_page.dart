@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pap/components/heat_map.dart';
 import 'package:pap/data/workout_data.dart';
+import 'package:pap/models/workout.dart';
 import 'package:provider/provider.dart';
 import 'workout_page.dart';
 
@@ -99,6 +100,61 @@ class _HomePageState extends State<HomePage> {
     newWorkoutNameController.clear();
   }
 
+  void editWorkout(BuildContext context, Workout workout) {
+    final controller = TextEditingController(text: workout.name);
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Editar Treino"),
+        content: TextField(
+          controller: controller,
+          decoration: const InputDecoration(
+            hintText: "Novo nome do treino",
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              String newName = controller.text.trim();
+              if (newName.isNotEmpty) {
+                Provider.of<WorkoutData>(context, listen: false).editWorkout(workout.name, newName);
+              }
+              Navigator.pop(context);
+            },
+            child: const Text("Guardar"),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("Cancelar"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void deleteWorkout(BuildContext context, String workoutName) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Eliminar Treino"),
+        content: const Text("Tem certeza que deseja eliminar este treino?"),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Provider.of<WorkoutData>(context, listen: false).removeWorkout(workoutName);
+              Navigator.pop(context);
+            },
+            child: const Text("Sim"),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("Não"),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<WorkoutData>(
@@ -113,7 +169,6 @@ class _HomePageState extends State<HomePage> {
           ),
           child: Column(
             children: [
-              // AppBar
               AppBar(
                 backgroundColor: Colors.transparent,
                 elevation: 0,
@@ -127,8 +182,6 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-
-              // Heat Map Section
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Card(
@@ -145,8 +198,6 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-
-              // Workout List
               Expanded(
                 child: ListView.builder(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
@@ -159,7 +210,7 @@ class _HomePageState extends State<HomePage> {
                     return GestureDetector(
                       onTap: () => goToWorkoutPage(workout.name),
                       child: Card(
-                        color: hasSelectedExercise ? Colors.green : Colors.white, // Green if any exercise is selected
+                        color: hasSelectedExercise ? Colors.green : Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -179,7 +230,19 @@ class _HomePageState extends State<HomePage> {
                               color: Colors.black87,
                             ),
                           ),
-                          trailing: const Icon(Icons.arrow_forward_ios, color: Colors.purple),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.edit, color: Colors.blue),
+                                onPressed: () => editWorkout(context, workout),
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.delete, color: Colors.red),
+                                onPressed: () => deleteWorkout(context, workout.name),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     );

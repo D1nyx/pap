@@ -5,9 +5,10 @@ import 'package:pap/models/exercise.dart';
 import 'package:pap/models/workout.dart';
 
 class WorkoutData extends ChangeNotifier {
-  final db = HiveDatabase();
+  final HiveDatabase db = HiveDatabase();
 
   List<Workout> workoutList = [];
+  Map<DateTime, int> heatMapDataSet = {};
 
   void initializeWorkoutList() {
     if (db.previousDataExists()) {
@@ -41,10 +42,34 @@ class WorkoutData extends ChangeNotifier {
         weight: weight,
         reps: reps,
         sets: sets,
+        isCompleted: false,
       ),
     );
     notifyListeners();
     db.saveToDatabase(workoutList);
+  }
+
+  void editWorkout(String oldName, String newName) {
+    int index = workoutList.indexWhere((workout) => workout.name == oldName);
+    if (index != -1) {
+      workoutList[index] = Workout(
+        name: newName,
+        exercises: workoutList[index].exercises,
+      );
+      notifyListeners();
+      db.saveToDatabase(workoutList);
+    }
+  }
+
+  void removeWorkout(String workoutName) {
+    Workout workoutToRemove = getRelevantWorkout(workoutName);
+    for (var exercise in workoutToRemove.exercises) {
+      exercise.isCompleted = false;
+    }
+    workoutList.removeWhere((workout) => workout.name == workoutName);
+    notifyListeners();
+    db.saveToDatabase(workoutList);
+    loadHeatMap();
   }
 
   void checkOffExercise(String workoutName, String exerciseName) {
@@ -56,31 +81,30 @@ class WorkoutData extends ChangeNotifier {
   }
 
   Workout getRelevantWorkout(String workoutName) {
-    return workoutList.firstWhere((workout) => workout.name == workoutName);
+    return workoutList.firstWhere((workout) => workout.name == workoutName, orElse: () {
+      throw Exception("Workout '$workoutName' not found");
+    });
   }
 
   Exercise getRelevantExercise(String workoutName, String exerciseName) {
     Workout relevantWorkout = getRelevantWorkout(workoutName);
-    return relevantWorkout.exercises.firstWhere((exercise) => exercise.name == exerciseName);
+    return relevantWorkout.exercises.firstWhere((exercise) => exercise.name == exerciseName, orElse: () {
+      throw Exception("Exercise '$exerciseName' not found in workout '$workoutName'");
+    });
   }
 
   String getStartDate() {
     return db.getStartDate();
   }
 
-  Map<DateTime, int> heatMapDataSet = {};
-
   void loadHeatMap() {
+    heatMapDataSet.clear();
     DateTime startDate = createDateTimeObject(getStartDate());
     int daysInBetween = DateTime.now().difference(startDate).inDays;
-
     for (int i = 0; i <= daysInBetween; i++) {
       DateTime currentDate = startDate.add(Duration(days: i));
-
       String yyyymmdd = convertDateTimeToYYYYMMDD(currentDate);
-
       int completionStatus = db.getCompletedStatus(yyyymmdd);
-
       heatMapDataSet[currentDate] = completionStatus;
     }
   }
